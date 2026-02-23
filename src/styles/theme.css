@@ -1,0 +1,75 @@
+@layer theme {
+  :root {
+    /* Enterprise Medical Color Palette */
+    --navy-blue: #1E293B;
+    --navy-dark: #0F172A;
+    --navy-light: #334155;
+    
+    --slate-gray: #64748B;
+    --slate-light: #94A3B8;
+    --slate-lighter: #CBD5E1;
+    --slate-bg: #F1F5F9;
+    
+    --clean-white: #FFFFFF;
+    --off-white: #F8FAFC;
+    
+    --success-green: #10B981;
+    --success-light: #D1FAE5;
+    
+    --premium-gold: #F59E0B;
+    --premium-light: #FEF3C7;
+    
+    --error-red: #EF4444;
+    --error-light: #FEE2E2;
+    
+    --text-primary: #0F172A;
+    --text-secondary: #64748B;
+    --text-tertiary: #94A3B8;
+    
+    --border-color: #E2E8F0;
+    --divider-color: #CBD5E1;
+  }
+}
+
+@layer base {
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: var(--text-primary);
+    background-color: var(--off-white);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  h1 {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+    font-weight: 700;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+  }
+
+  button {
+    font-weight: 500;
+  }
+
+  /* Thin professional dividers */
+  .divider {
+    height: 1px;
+    background-color: var(--divider-color);
+  }
+}
