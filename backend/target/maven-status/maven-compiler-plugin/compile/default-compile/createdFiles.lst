@@ -1,4 +1,0 @@
-com\example\healthtech\HealthTechApplication.class
-com\example\healthtech\repository\VitalsLogRepository.class
-com\example\healthtech\controller\VitalsLogController.class
-com\example\healthtech\model\VitalsLog.class

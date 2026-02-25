@@ -1,2 +1,12 @@
-node_modules/ 
+# Build artifacts and dependencies
+node_modules/
 backend/target/
+dist/
+
+# Local configuration and secrets
+.env
+seed_output.json
+
+# Editor specific files
+.vscode/
+**/ .vscode/
