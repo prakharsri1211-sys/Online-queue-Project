@@ -74,15 +74,29 @@ export default function Mediator() {
   const [showEmergencyAlert, setShowEmergencyAlert] = useState(false);
 
   const handleMoveDown = (tokenNumber: number) => {
-    setPatients((prev) => {
-      const patient = prev.find((p) => p.tokenNumber === tokenNumber);
-      if (!patient || !patient.isLate) return prev;
-
-      // Remove patient
-      const filtered = prev.filter((p) => p.tokenNumber !== tokenNumber);
-      
-      // Add to end of queue
-      return [...filtered, { ...patient, isLate: false }];
+    // Call backend to trigger late-arrival logic (deduct credit, move in queue)
+    const api = import.meta.env.VITE_API_URL || "http://localhost:8080";
+    fetch(`${api}/api/mediator/triggerLateArrival`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ patientId: tokenNumber })
+    }).then((res) => {
+      if (!res.ok) throw new Error("trigger failed");
+      // Reflect change locally as well
+      setPatients((prev) => {
+        const patient = prev.find((p) => p.tokenNumber === tokenNumber);
+        if (!patient) return prev;
+        const filtered = prev.filter((p) => p.tokenNumber !== tokenNumber);
+        return [...filtered, { ...patient, isLate: false }];
+      });
+    }).catch(() => {
+      // fallback local move-down if backend fails
+      setPatients((prev) => {
+        const patient = prev.find((p) => p.tokenNumber === tokenNumber);
+        if (!patient || !patient.isLate) return prev;
+        const filtered = prev.filter((p) => p.tokenNumber !== tokenNumber);
+        return [...filtered, { ...patient, isLate: false }];
+      });
     });
   };
 
@@ -351,6 +365,15 @@ export default function Mediator() {
           {/* Navigation */}
           <div className="mt-6 space-y-3">
             <div className="divider"></div>
+            <button
+              onClick={() => navigate("/mediator/dashboard")}
+              className="w-full py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2"
+              style={{ backgroundColor: "#0D9488" }}
+            >
+              View Live Queue Dashboard
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
             <button
               onClick={() => navigate("/doctor")}
               className="w-full py-3 rounded-lg text-white font-medium flex items-center justify-center gap-2"

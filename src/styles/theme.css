@@ -1,34 +1,64 @@
-@layer theme {
-  :root {
-    /* Enterprise Medical Color Palette */
-    --navy-blue: #1E293B;
-    --navy-dark: #0F172A;
-    --navy-light: #334155;
-    
-    --slate-gray: #64748B;
-    --slate-light: #94A3B8;
-    --slate-lighter: #CBD5E1;
-    --slate-bg: #F1F5F9;
-    
-    --clean-white: #FFFFFF;
-    --off-white: #F8FAFC;
-    
-    --success-green: #10B981;
-    --success-light: #D1FAE5;
-    
-    --premium-gold: #F59E0B;
-    --premium-light: #FEF3C7;
-    
-    --error-red: #EF4444;
-    --error-light: #FEE2E2;
-    
-    --text-primary: #0F172A;
-    --text-secondary: #64748B;
-    --text-tertiary: #94A3B8;
-    
-    --border-color: #E2E8F0;
-    --divider-color: #CBD5E1;
-  }
+:root {
+  /* Enterprise Medical Color Palette */
+  --navy-blue: #1E293B;
+  --navy-dark: #0F172A;
+  --navy-light: #334155;
+  
+  --slate-gray: #64748B;
+  --slate-light: #94A3B8;
+  --slate-lighter: #CBD5E1;
+  --slate-bg: #F1F5F9;
+  
+  --clean-white: #FFFFFF;
+  --off-white: #F8FAFC;
+  
+  --success-green: #10B981;
+  --success-light: #D1FAE5;
+  --deep-teal: #0D9488; /* Primary clinical teal */
+  --soft-slate: #94A3B8; /* secondary */
+  
+  --premium-gold: #F59E0B;
+  --premium-light: #FEF3C7;
+  
+  --error-red: #EF4444;
+  --error-light: #FEE2E2;
+  
+  --text-primary: #0F172A;
+  --text-secondary: #64748B;
+  --text-tertiary: #94A3B8;
+  
+  --border-color: #E2E8F0;
+  --divider-color: #CBD5E1;
+}
+
+/* Role based backgrounds */
+.bg-patient {
+  background-color: #F0FDFA; /* Light Teal */
+}
+.bg-doctor {
+  background-color: #EFF6FF; /* Soft Blue */
+}
+.bg-mediator {
+  background-color: #EEF2FF; /* Light Indigo */
+}
+
+/* Primary button */
+.btn-primary {
+  background-color: var(--deep-teal);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: #0b7a6f;
+}
+
+/* Global primary button styling with standard CSS */
+button {
+  background-color: #0D9488;
+  color: white;
+  transition: background-color 0.2s ease;
+}
+button:hover {
+  background-color: #0b7a6f;
 }
 
 @layer base {
@@ -37,7 +67,6 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: var(--text-primary);
-    background-color: var(--off-white);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -72,4 +101,174 @@
     height: 1px;
     background-color: var(--divider-color);
   }
+}
+
+/* ============================================================ */
+/* THREE-TIER UI STRATEGY: Role-based look and feel           */
+/* ============================================================ */
+
+/* PATIENT LOOK: Calm & Trust (Clinical Teal #0D9488) */
+.patient-container {
+  background-color: #F0FDFA;
+  border-left: 4px solid #0D9488;
+}
+
+.patient-card {
+  background-color: white;
+  border: 1px solid #D1F4EE;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(13, 148, 136, 0.1);
+}
+
+.patient-button {
+  background-color: #0D9488;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.patient-button:hover {
+  background-color: #0b7a6f;
+  box-shadow: 0 4px 6px rgba(13, 148, 136, 0.2);
+}
+
+/* DOCTOR LOOK: Professional & Focused (Deep Slate #1E293B) */
+.doctor-container {
+  background-color: #F8FAFC;
+}
+
+.doctor-header {
+  background-color: #1E293B;
+  color: white;
+  padding: 16px;
+  border-radius: 0;
+}
+
+.doctor-table {
+  border: 1px solid #E2E8F0;
+  background-color: white;
+}
+
+.doctor-button {
+  background-color: #1E293B;
+  color: white;
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.doctor-button:hover {
+  background-color: #0f172a;
+}
+
+.doctor-badge {
+  background-color: #E2E8F0;
+  color: #1E293B;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 4px 12px;
+}
+
+/* MEDIATOR LOOK: Action & Efficiency (Light Indigo #EEF2FF) */
+.mediator-container {
+  background-color: #EEF2FF;
+  min-height: 100vh;
+}
+
+.mediator-header {
+  background-color: #4F46E5;
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.status-badge {
+  border-radius: 12px;
+  padding: 6px 14px;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.late {
+  background-color: #DC2626;
+  color: white;
+}
+
+.status-badge.waiting {
+  background-color: #F59E0B;
+  color: white;
+}
+
+.status-badge.serving {
+  background-color: #10B981;
+  color: white;
+}
+
+.status-badge.premium {
+  background-color: #A78BFA;
+  color: white;
+}
+
+.action-button-primary {
+  background-color: #4F46E5;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 10px 20px;
+  transition: all 0.2s ease;
+}
+
+.action-button-primary:hover {
+  background-color: #4338CA;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+}
+
+.action-button-danger {
+  background-color: #DC2626;
+  color: white;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 8px 16px;
+}
+
+.action-button-danger:hover {
+  background-color: #B91C1C;
+}
+
+/* SHARED HEADER WITH MODE BADGE */
+.app-header {
+  background-color: white;
+  border-bottom: 1px solid #E2E8F0;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.mode-badge {
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mode-badge.patient {
+  background-color: #D1F4EE;
+  color: #0D9488;
+}
+
+.mode-badge.doctor {
+  background-color: #E2E8F0;
+  color: #1E293B;
+}
+
+.mode-badge.mediator {
+  background-color: #EEF2FF;
+  color: #4F46E5;
 }

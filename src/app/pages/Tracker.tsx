@@ -18,6 +18,16 @@ export default function Tracker() {
       return;
     }
 
+    // fetch finance ledger (credit balance) if patientId present
+    const api = (import.meta as any).env.VITE_API_URL || "http://localhost:8080";
+    const parsed = JSON.parse(info || "null");
+    const pid = parsed?.patientId;
+    if (pid) {
+      fetch(`${api}/api/doctor/balance/${pid}`).then((r) => r.json()).then((data) => {
+        setBookingInfo((prev: any) => ({ ...prev, financeLedger: data }));
+      }).catch(() => {});
+    }
+
     // Simulate serving number updates
     const interval = setInterval(() => {
       setCurrentServing((prev) => prev + 1);
@@ -114,6 +124,15 @@ export default function Tracker() {
             ) : (
               <div className="text-5xl font-bold mb-3" style={{ color: "var(--navy-blue)" }}>
                 #{bookingInfo.tokenNumber}
+              </div>
+            )}
+
+            {bookingInfo.financeLedger && (
+              <div className="divider mb-2"></div>
+              )}
+            {bookingInfo.financeLedger && (
+              <div className="text-sm mb-2" style={{ color: "var(--text-secondary)" }}>
+                Credit Balance: <span className="font-semibold" style={{ color: "var(--premium-gold)" }}>₹{bookingInfo.financeLedger.creditBalance}</span>
               </div>
             )}
 

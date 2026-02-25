@@ -70,13 +70,31 @@ export default function Login() {
       setError("Enter valid 12-digit Adhar number");
       return;
     }
-    
-    const hasProfile = localStorage.getItem("patientProfile");
-    if (hasProfile) {
-      navigate("/booking");
-    } else {
-      navigate("/medical-profile");
-    }
+
+    // Call backend login API to get or create account
+    fetch("/api/accounts/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        phoneNumber: phoneNumber,
+        primaryAadharNumber: adharNumber,
+      }),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Login failed");
+        return response.json();
+      })
+      .then((account) => {
+        // Store account data in session storage
+        sessionStorage.setItem("accountData", JSON.stringify(account));
+        // Navigate to patient selector
+        navigate("/patient-selector");
+      })
+      .catch((err) => {
+        setError(err.message || "Login failed. Please try again.");
+      });
   };
 
   return (

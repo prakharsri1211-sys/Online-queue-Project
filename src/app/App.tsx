@@ -1,13 +1,6 @@
-import { RouterProvider } from 'react-router';
-import { router } from './routes';
-
-import HealthTrackerCard from './components/HealthTrackerCard';
+import { RouterProvider } from "react-router";
+import { router } from "./routes";
 
 export default function App() {
-  return (
-    <>
-      <RouterProvider router={router} />
-      <HealthTrackerCard />
-    </>
-  );
+  return <RouterProvider router={router} />;
 }

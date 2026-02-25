@@ -26,5 +26,7 @@ export default defineConfig({
         changeOrigin: true,
       },
     },
+    // Ensure SPA history fallback so refreshes on nested routes work
+    historyApiFallback: true,
   },
 })
