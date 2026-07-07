@@ -38,6 +38,18 @@ public class TelemetryController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/action")
+    public ResponseEntity<?> reportUserAction(@RequestBody Map<String, Object> payload) {
+        String action = payload.get("action") != null ? String.valueOf(payload.get("action")) : "UNKNOWN_ACTION";
+        String details = payload.get("details") != null ? String.valueOf(payload.get("details")) : null;
+        String url = payload.get("url") != null ? String.valueOf(payload.get("url")) : null;
+        String userAgent = payload.get("userAgent") != null ? String.valueOf(payload.get("userAgent")) : null;
+        String userId = payload.get("userId") != null ? String.valueOf(payload.get("userId")) : null;
+
+        telemetryService.logUserAction(action, details, userId, userAgent, url);
+        return ResponseEntity.ok().build();
+    }
+
     @GetMapping("/logs")
     public ResponseEntity<List<SystemErrorLog>> getLogs() {
         // Ideally this should be secured with @PreAuthorize("hasRole('ADMIN')") or similar

@@ -25,6 +25,9 @@ public class AuthController {
     private com.example.healthtech.config.JwtUtil jwtUtil;
 
     @Autowired
+    private com.example.healthtech.service.TelemetryService telemetryService;
+
+    @Autowired
     private com.example.healthtech.repository.jpa.DoctorRepository doctorRepository;
     @Autowired
     private com.example.healthtech.repository.jpa.MediatorRepository mediatorRepository;
@@ -223,6 +226,7 @@ public class AuthController {
             if (accountOpt.isPresent()) {
                 Account user = accountOpt.get();
                 if (passwordEncoder.matches(password, user.getPassword())) {
+                    telemetryService.logUserAction("LOGIN_SUCCESS", "User logged in successfully", String.valueOf(user.getId()), null, "/api/auth/login");
                     String token = jwtUtil.generateToken(user.getUsername(), user.getRole(), user.getId(), user.isIdentityVerified());
                     Map<String, Object> response = new HashMap<>();
                     response.put("id", user.getId());
@@ -278,9 +282,11 @@ public class AuthController {
                     response.put("message", "Login successful");
                     return ResponseEntity.ok(response);
                 } else {
+                    telemetryService.logUserAction("LOGIN_FAILED", "Incorrect password", String.valueOf(user.getId()), null, "/api/auth/login");
                     return ResponseEntity.status(401).body(Map.of("error", "Incorrect password. Please try again."));
                 }
             } else {
+                telemetryService.logUserAction("LOGIN_FAILED", "Account does not exist for username: " + username, null, null, "/api/auth/login");
                 return ResponseEntity.status(404).body(Map.of("error", "Account doesn't exist."));
             }
 

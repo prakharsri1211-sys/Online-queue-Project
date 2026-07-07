@@ -51,6 +51,18 @@ public class TelemetryService {
         logRepository.save(accessLog);
     }
 
+    public void logUserAction(String action, String details, String userId, String userAgent, String url) {
+        SystemErrorLog actionLog = new SystemErrorLog();
+        actionLog.setLevel("INFO");
+        actionLog.setSource("USER_ACTION");
+        actionLog.setMessage(action + (details != null && !details.isEmpty() ? " - " + details : ""));
+        actionLog.setUrl(url);
+        actionLog.setUserAgent(userAgent);
+        actionLog.setUserId(userId);
+        actionLog.setResolved(true); 
+        logRepository.save(actionLog);
+    }
+
     public List<SystemErrorLog> getAllLogs() {
         return logRepository.findAllByOrderByTimestampDesc();
     }
