@@ -3,7 +3,7 @@
 A fully loaded, real-time queue management application built to optimize scheduling and user flow.
 
 ## Live Demo
-Check out the live application: [Render Deployment / Supabase Link]
+Check out the live application: https://online-queue-frontend.onrender.com
 
 ## 📱 Android Prototype
 Click below to directly download and install the Android APK:
