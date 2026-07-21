@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { LogOut, ShieldAlert } from "lucide-react";
 import { motion } from "motion/react";
+import { trackUserAction } from "../utils/telemetry";
 
 export default function MediatorUnassignedPage() {
     const navigate = useNavigate();
@@ -33,7 +34,8 @@ export default function MediatorUnassignedPage() {
         return () => clearInterval(interval);
     }, [navigate]);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await trackUserAction("LOGOUT", "Mediator logged out from Unassigned Page");
         localStorage.clear();
         navigate("/login");
     };

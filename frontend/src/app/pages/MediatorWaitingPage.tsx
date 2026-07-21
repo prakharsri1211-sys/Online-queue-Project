@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { ShieldAlert, LogOut, Loader2, Bell, CheckCircle2, MapPin, Stethoscope, ArrowRight, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { trackUserAction } from "../utils/telemetry";
 const API = (import.meta as any).env.VITE_API_URL || "https://online-queue-project.onrender.com";
 
 export default function MediatorWaitingPage() {
@@ -78,7 +79,8 @@ export default function MediatorWaitingPage() {
         return () => clearInterval(interval);
     }, [status, assignmentData]);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await trackUserAction("LOGOUT", "Mediator logged out from Waiting Page");
         localStorage.clear();
         navigate("/login");
     };

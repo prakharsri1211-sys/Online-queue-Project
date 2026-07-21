@@ -329,7 +329,7 @@ export default function SignUpPage(): React.JSX.Element {
                                         <input
                                             type="tel"
                                             name="phone"
-                                            placeholder="Mobile Number"
+                                            placeholder=""
                                             maxLength={10}
                                             required
                                             value={formData.phone}

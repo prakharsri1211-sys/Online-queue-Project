@@ -22,6 +22,7 @@ import {
 import useWebSocket from "react-use-websocket";
 import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
+import { trackUserAction } from "../utils/telemetry";
 
 interface Patient {
   id: string;
@@ -488,6 +489,9 @@ export default function DoctorDashboard(): React.JSX.Element {
     setPatients(prev => prev.filter(p => String(p.id) !== String(id)));
     setTodayAppointments(prev => prev.filter((p: any) => String(p.patientId) !== String(id) && String(p.id) !== String(id)));
     
+    // Telemetry: track consultation ended
+    trackUserAction("CONSULTATION_ENDED", `Patient ID: ${id} discharged by Doctor`);
+
     sendMessage(
       JSON.stringify({ type: "DISCHARGE", patientId: id.toString() })
     );
@@ -619,7 +623,8 @@ export default function DoctorDashboard(): React.JSX.Element {
           </button>
           <button
             id="logout-btn"
-            onClick={() => {
+            onClick={async () => {
+              await trackUserAction("LOGOUT", "Doctor logged out from Dashboard");
               localStorage.clear();
               navigate("/");
             }}

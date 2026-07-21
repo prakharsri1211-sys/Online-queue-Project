@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { AlertCircle, Plus, Users, ShieldAlert, Activity, ChevronRight, UserPlus, Sparkles, Fingerprint, Sun, Moon, LogOut, CreditCard, X, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { APP_STATUS, APP_ROLES } from "../utils/constants";
+import { trackUserAction } from "../utils/telemetry";
 
 interface PatientForm {
   name: string;
@@ -54,7 +55,8 @@ export default function PatientSelector() {
   const [saving, setSaving] = useState(false);
   const [checkingGatekeeper, setCheckingGatekeeper] = useState(false);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await trackUserAction("LOGOUT", "Patient logged out from Profile Selector");
     localStorage.clear();
     sessionStorage.clear();
     navigate("/");

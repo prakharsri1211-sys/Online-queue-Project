@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { motion } from "motion/react";
 import { Calendar, CreditCard, ChevronRight, Sparkles, Activity, ShieldCheck, ArrowRight, UserCircle, Users, Wallet, AlertCircle, LogOut } from "lucide-react";
+import { trackUserAction } from "../utils/telemetry";
 const API = (import.meta as any).env.VITE_API_URL || "https://online-queue-project.onrender.com";
 
 export default function DoctorOnboarding(): React.JSX.Element {
@@ -10,7 +11,8 @@ export default function DoctorOnboarding(): React.JSX.Element {
 
     const [launchError, setLaunchError] = React.useState("");
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        await trackUserAction("LOGOUT", "Doctor logged out from Onboarding");
         localStorage.clear();
         sessionStorage.clear();
         navigate('/login', { replace: true });

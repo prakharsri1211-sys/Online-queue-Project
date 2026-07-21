@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Search, MapPin, Loader2 } from 'lucide-react';
+import { Search, MapPin, Loader2, LocateFixed } from 'lucide-react';
 
 // Fix leaflet default icon issue with bundlers
 import iconUrl from 'leaflet/dist/images/marker-icon.png';
@@ -65,6 +65,42 @@ export const LocationSelectorMap: React.FC<LocationSelectorMapProps> = ({
     onLocationSelected(defaultCoords);
   }, []);
 
+  const handleCurrentLocation = () => {
+    setIsLoading(true);
+    setError('');
+    
+    if (!navigator.geolocation) {
+      setError('Geolocation is not supported by your browser');
+      setIsLoading(false);
+      return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`);
+          const data = await res.json();
+          if (data && data.address && data.address.postcode) {
+            setPostalCode(data.address.postcode);
+          }
+          const newCoords = { lat: latitude, lng: longitude };
+          setPosition(newCoords);
+          onLocationSelected(newCoords);
+          localStorage.setItem('patientLocation', JSON.stringify(newCoords));
+        } catch (err) {
+          setError('Failed to fetch location details.');
+        } finally {
+          setIsLoading(false);
+        }
+      },
+      (err) => {
+        setError('Unable to retrieve your location');
+        setIsLoading(false);
+      }
+    );
+  };
+
   const handleSearch = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!postalCode.trim()) return;
@@ -125,16 +161,28 @@ export const LocationSelectorMap: React.FC<LocationSelectorMapProps> = ({
           }`}
           placeholder="Enter 6-Digit Postal Code"
           value={postalCode}
-          onChange={(e) => setPostalCode(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value.replace(/\D/g, '').slice(0, 6);
+            setPostalCode(val);
+          }}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               e.preventDefault();
               handleSearch(e as any);
             }
           }}
-          maxLength={10}
+          maxLength={6}
         />
-        <div className="absolute inset-y-0 right-0 pr-1 flex items-center">
+        <div className="absolute inset-y-0 right-0 pr-1 flex items-center gap-1">
+          <button
+            type="button"
+            onClick={handleCurrentLocation}
+            title="Use Current Location"
+            disabled={isLoading}
+            className="p-2 bg-emerald-500/20 text-emerald-500 rounded-xl hover:bg-emerald-500/30 disabled:opacity-50 disabled:bg-slate-800 disabled:text-slate-600 transition-colors"
+          >
+            <LocateFixed size={16} />
+          </button>
           <button
             type="button"
             onClick={(e) => handleSearch(e as any)}

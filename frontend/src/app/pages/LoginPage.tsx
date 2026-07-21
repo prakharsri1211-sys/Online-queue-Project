@@ -347,7 +347,7 @@ export default function LoginPage(): React.JSX.Element {
     };
 
     const modeSubtitle: Record<PageMode, string> = {
-        login: "Secure Access for Healthcare Professionals",
+        login: "",
         forgot_aadhaar: "Verify your identity via Aadhaar",
         forgot_otp: "Enter the OTP sent to your mobile",
         forgot_reset: "Create your new secure password"
@@ -368,9 +368,11 @@ export default function LoginPage(): React.JSX.Element {
                 <h1 className="text-2xl md:text-3xl font-bold text-slate-100 mb-2 tracking-tight">
                     {modeTitle[mode]}
                 </h1>
-                <p className="text-slate-400 font-medium">
-                    {modeSubtitle[mode]}
-                </p>
+                {modeSubtitle[mode] && (
+                    <p className="text-slate-400 font-medium mt-1">
+                        {modeSubtitle[mode]}
+                    </p>
+                )}
 
                 {mode === "login" && renderLogin()}
                 {mode === "forgot_aadhaar" && renderAadhaarEntry()}

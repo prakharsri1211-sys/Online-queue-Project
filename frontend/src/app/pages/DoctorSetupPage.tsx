@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 import { ChevronLeft, Info, Activity, Truck, Home, ShoppingBag, LogOut } from "lucide-react";
+import { trackUserAction } from "../utils/telemetry";
 
 export default function DoctorSetupPage(): React.JSX.Element {
     const navigate = useNavigate();
@@ -40,7 +41,8 @@ export default function DoctorSetupPage(): React.JSX.Element {
                         <ChevronLeft size={16} /> Back
                     </button>
                     <button
-                        onClick={() => {
+                        onClick={async () => {
+                            await trackUserAction("LOGOUT", "Doctor logged out from Setup Page");
                             localStorage.clear();
                             navigate("/");
                         }}

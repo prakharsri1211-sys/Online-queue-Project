@@ -8,6 +8,7 @@ import {
 import useWebSocket from "react-use-websocket";
 import { motion, AnimatePresence } from "motion/react";
 import { APP_STATUS } from "../utils/constants";
+import { trackUserAction } from "../utils/telemetry";
 
 /* ──────────────────────────────────────────────────────────────
    TYPES
@@ -584,7 +585,8 @@ export default function Tracker() {
     navigate("/specialty-selection");
   }, [navigate]);
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = useCallback(async () => {
+    await trackUserAction("LOGOUT", "Patient logged out from Tracker");
     localStorage.clear();
     sessionStorage.clear();
     navigate("/");

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { Users, AlertCircle, Phone, ArrowUp, ArrowDown, LogOut, Moon, Sun, Search, Zap, Crown, Ticket, Activity, BellRing, MapPin, Clock, AlertTriangle, Stethoscope, ArrowLeft } from "lucide-react";
 import useWebSocket from "react-use-websocket";
 import { motion, AnimatePresence } from "motion/react";
+import { trackUserAction } from "../utils/telemetry";
 const API = (import.meta as any).env.VITE_API_URL || "https://online-queue-project.onrender.com";
 import { APP_STATUS, APP_ROLES, ACTIVE_QUEUE_STATUSES } from "../utils/constants";
 
@@ -316,13 +317,15 @@ export default function MediatorDashboard() {
     }
   }, []);
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = useCallback(async () => {
+    await trackUserAction("LOGOUT", "Mediator logged out from Dashboard");
     localStorage.clear();
     sessionStorage.clear();
     navigate("/");
   }, [navigate]);
 
   const handleCallPatient = useCallback((p: Patient) => {
+    trackUserAction("CONSULTATION_STARTED", `Mediator called Patient ID: ${p.patientId || p.id}`);
     sendMessage(JSON.stringify({ 
       type: "CALL_PATIENT", 
       patientName: p.patientName || p.name,
