@@ -123,6 +123,10 @@ export default function PatientSelector() {
                  setSelectedPatientId(data[0].id || data[0].patientId || "");
               }
             }
+          } else if (r.status === 401 || r.status === 404) {
+            localStorage.clear();
+            sessionStorage.clear();
+            navigate("/");
           }
         })
         .catch(() => {
